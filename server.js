@@ -1,12 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const port = 5000;
+const port = process.env.PORT || 5000;
 mongoose.set("strictQuery", false);
 
-const url = "mongodb://127.0.0.1:27017/schoolapp";
+// const url = "mongodb://127.0.0.1:27017/schoolapp";
+const url = process.env.MONGO_URI;
 mongoose
   .connect(url, {
     useNewUrlParser: true,
@@ -19,7 +21,11 @@ mongoose
     console.log("Error in MongoDB connection");
   });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://school-management-system12.netlify.app", // Your frontend URL
+  })
+);
 app.use(bodyParser.json());
 
 const classRoute = require("./routes/classRoute");
